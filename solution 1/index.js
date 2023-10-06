@@ -3,19 +3,19 @@ const express = require('express');
 const axios = require('axios');
 require('./config/dbConnect')();
 
-const Company = require('./Model/companyModel');
-const Train = require('./Model/trainModel');
+
 
 const genearateToken = require('./utils/generateToken');
 const authMiddleWare = require('./middleware/authMiddleware');
+
+const Company = require('./Model/companyModel');
+const Train = require('./Model/trainModel');
 
 const app = express();
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-        res.send("Server is working fine.")
-})
+
 
 app.post('/train/register', async (req, res) => {
         const checkAlreadyRegister = await Company.find({ rollNo: req.body.rollNo });
@@ -42,13 +42,13 @@ app.post('/train/register', async (req, res) => {
         }
 })
 
-// register Auth
+// After Register requesting for Auth
 
 app.post("/train/register/auth", async (req, res) => {
 
 });
 
-// get  Train
+// Get Trains according to the price and date
 app.get('/train/trains', authMiddleWare, async (req, res) => {
         const trains = await Train.find();
         return res.json({
@@ -57,7 +57,7 @@ app.get('/train/trains', authMiddleWare, async (req, res) => {
         })
 });
 
-// get Train With Number
+// get Train With Train ID
 
 app.get("/train/trains/:Number", authMiddleWare, async (req, res) => {
         const train = await Train.findOne(req.params.Number);
